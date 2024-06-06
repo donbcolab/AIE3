@@ -45,6 +45,12 @@ class VectorDatabase:
         self.embedding_model = embedding_model or EmbeddingModel()
         self.index = None
 
+    async def abuild_from_list(self, list_of_text: List[str]) -> "VectorDatabase":
+        embeddings = await self.embedding_model.async_get_embeddings(list_of_text)
+        for text, embedding in zip(list_of_text, embeddings):
+            self.insert(text, np.array(embedding))
+        return self
+
     async def abuild_from_list(self, list_of_text: List[str], metadata_list: List[dict]) -> "VectorDatabase":
         """
         Asynchronously builds the vector database from a list of text and corresponding metadata.
