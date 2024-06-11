@@ -6,3 +6,8 @@ scikit-learn
 ipykernel
 matplotlib
 plotly
+arxiv
+python-dotenv
+faiss-cpu
+typing-extensions
+tiktoken

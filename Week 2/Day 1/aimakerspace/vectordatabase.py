@@ -1,6 +1,6 @@
 import faiss
 import numpy as np
-from typing import List, Tuple, Callable, Union
+from typing import List, Tuple, Callable, Union, Optional
 from aimakerspace.openai_utils.embedding import EmbeddingModel
 import asyncio
 import os
@@ -40,41 +40,29 @@ class VectorDatabase:
         Args:
             embedding_model (EmbeddingModel, optional): The model to generate embeddings. Defaults to None.
         """
-        self.vectors = np.empty((0, 0))  # Initialize with an empty array
+        self.vectors = np.empty((0, 512))  # Initialize with an empty array with the appropriate dimension (512 is an example)
         self.metadata = []
         self.embedding_model = embedding_model or EmbeddingModel()
         self.index = None
 
-    async def abuild_from_list(self, list_of_text: List[str]) -> "VectorDatabase":
-        embeddings = await self.embedding_model.async_get_embeddings(list_of_text)
-        for text, embedding in zip(list_of_text, embeddings):
-            self.insert(text, np.array(embedding))
-        return self
+    def insert(self, key: str, vector: np.array) -> None:
+        if self.vectors.size == 0:
+            self.vectors = np.array([vector])
+        else:
+            self.vectors = np.vstack((self.vectors, vector))
+        self.metadata.append({'text': key})
+        if self.index is not None:
+            self.index.add(np.array([vector]))
 
-    async def abuild_from_list(self, list_of_text: List[str], metadata_list: List[dict]) -> "VectorDatabase":
+    def build_index(self) -> None:
         """
-        Asynchronously builds the vector database from a list of text and corresponding metadata.
-
-        Args:
-            list_of_text (List[str]): List of text strings to build the database from.
-            metadata_list (List[dict]): List of metadata dictionaries corresponding to the text.
-
-        Returns:
-            VectorDatabase: The built vector database instance.
+        Builds the FAISS index with the existing vectors.
         """
-        embeddings = await self.embedding_model.async_get_embeddings(list_of_text)
-        self.vectors = np.array(embeddings)
-        for text, metadata in zip(list_of_text, metadata_list):
-            metadata['text'] = text  # Ensure each metadata dictionary contains the text
-            self.metadata.append(metadata)
-
-        # Determine embedding dimension dynamically
+        if self.vectors.size == 0:
+            raise ValueError("No vectors to build the index with.")
         embedding_dim = self.vectors.shape[1]
-
-        # Build FAISS index
         self.index = faiss.IndexFlatL2(embedding_dim)
         self.index.add(self.vectors)
-        return self
 
     def search_by_text(self, query: str, k: int = 5) -> List[Tuple[str, float, dict]]:
         """
@@ -128,7 +116,8 @@ class VectorDatabase:
         self.vectors = np.vstack((self.vectors, new_vectors))
         for metadata in new_metadata:
             self.metadata.append(metadata)
-        self.index.add(new_vectors)
+        if self.index is not None:
+            self.index.add(new_vectors)
 
     def get_metadata(self, key: Union[int, str]) -> dict:
         """
@@ -150,6 +139,21 @@ class VectorDatabase:
         else:
             raise TypeError("Key must be an integer index or a string text.")
 
+    async def abuild_from_list(self, list_of_text: List[str], metadata_list: Optional[List[dict]] = None) -> "VectorDatabase":
+        embeddings = await self.embedding_model.async_get_embeddings(list_of_text)
+        if metadata_list is None:
+            for text, embedding in zip(list_of_text, embeddings):
+                self.insert(text, np.array(embedding))
+        else:
+            self.vectors = np.array(embeddings)
+            for text, metadata in zip(list_of_text, metadata_list):
+                metadata['text'] = text  # Ensure each metadata dictionary contains the text
+                self.metadata.append(metadata)
+
+        # Build FAISS index
+        self.build_index()
+        return self
+
 async def main():
     embedding_model = EmbeddingModel()  # Initialize the embedding model
 
@@ -170,7 +174,9 @@ async def main():
     ]
 
     vector_db = VectorDatabase(embedding_model=embedding_model)
-    vector_db = await vector_db.abuild_from_list(list_of_text, metadata_list)
+    vector_db = await vector_db.abuild_from_list(list_of_text, metadata_list) #optional metadata_list parameter
+    vector_db = await vector_db.abuild_from_list(list_of_text) 
+
     k = 2
 
     # Search using FAISS
