@@ -95,7 +95,7 @@
       "containerId": "fd5ABzbE9CjDS-G7DbuHJ",
       "originalText": "Orchestration\n\n(Python)",
       "lineHeight": 1.25,
-      "baseline": 68
+      "baseline": 71
     },
     {
       "type": "rectangle",
@@ -263,7 +263,7 @@
       "containerId": "r9oHiHbQU2TrAbRiUCvRv",
       "originalText": "APIs / Plugins\n(LandingAI)",
       "lineHeight": 1.25,
-      "baseline": 68
+      "baseline": 71
     },
     {
       "type": "rectangle",
@@ -345,7 +345,7 @@
       "containerId": "BYaP5FAkK8gMQBr70ylpk",
       "originalText": "Effective Ops\n(W&B, weave)",
       "lineHeight": 1.25,
-      "baseline": 93
+      "baseline": 96
     },
     {
       "type": "rectangle",
@@ -505,7 +505,7 @@
       "containerId": "dJJB2frI7Gsw4_KXqtFLj",
       "originalText": "Florence-2",
       "lineHeight": 1.25,
-      "baseline": 18
+      "baseline": 21
     },
     {
       "type": "rectangle",
@@ -773,8 +773,8 @@
     },
     {
       "type": "text",
-      "version": 540,
-      "versionNonce": 443691110,
+      "version": 544,
+      "versionNonce": 2017676138,
       "isDeleted": false,
       "id": "ygDktZyyAYp7sGTqo8UMc",
       "fillStyle": "solid",
@@ -794,7 +794,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1721778162991,
+      "updated": 1722648031455,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -809,8 +809,8 @@
     },
     {
       "type": "text",
-      "version": 361,
-      "versionNonce": 772111334,
+      "version": 365,
+      "versionNonce": 418969654,
       "isDeleted": false,
       "id": "eap1otDEyZlWVF48mO20W",
       "fillStyle": "solid",
@@ -835,7 +835,7 @@
           "type": "arrow"
         }
       ],
-      "updated": 1721778220335,
+      "updated": 1722648031456,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -850,8 +850,8 @@
     },
     {
       "type": "text",
-      "version": 380,
-      "versionNonce": 110639718,
+      "version": 384,
+      "versionNonce": 1230655018,
       "isDeleted": false,
       "id": "yZr0_62xpadIU-Tq-B3ox",
       "fillStyle": "solid",
@@ -876,7 +876,7 @@
           "type": "arrow"
         }
       ],
-      "updated": 1721778220335,
+      "updated": 1722648031456,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1781,7 +1781,7 @@
       "containerId": "l-YIdfXGRHdI52aKtMeuN",
       "originalText": "OWL",
       "lineHeight": 1.25,
-      "baseline": 18
+      "baseline": 21
     },
     {
       "type": "rectangle",
@@ -1851,7 +1851,7 @@
       "containerId": "WZLvEPpwha0zzy-1H-qMn",
       "originalText": "Grounding DINO",
       "lineHeight": 1.25,
-      "baseline": 43
+      "baseline": 46
     }
   ],
   "appState": {
